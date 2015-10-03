@@ -1,5 +1,6 @@
 package ieee;
 import robocode.*;
+import static robocode.util.Utils.normalRelativeAngleDegrees;
 //import java.awt.Color;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/Robot.html
@@ -12,52 +13,44 @@ public class MoistPits extends AdvancedRobot
 	/**
 	 * run: MoistPits's default behavior
 	 */
-	double pEnergy = 100;
-	public void run() {
 		// Initialization of the robot should be put here
 
 		// After trying out your robot, try uncommenting the import at the top,
 		// and the next line:
 
 		//setColors(Color.blue,Color.white,Color.white); // body,gun,radar
-
-		// Robot main loop
-		while(true) {
-			// Replace the next 4 lines with any behavior you would like
-//			ahead(100);
-			turnGunRight(360);
-//			back(100);
-			turnGunRight(360);
-		}
-	}
-
+    public void run() {
+        setAdjustRadarForRobotTurn(true);
+        setAdjustGunForRobotTurn(true);
+        setAdjustRadarForGunTurn(true);
+        while (true) {
+            turnRadarRight(360);
+        }
+    }   
 	/**
 	 * onScannedRobot: What to do when you see another robot
 	 */
-	public void onScannedRobot(ScannedRobotEvent e) {
-		// Replace the next line with any behavior you would like
-		double energydiff = pEnergy - e.getEnergy();
-		double bearing = e.getBearing();
-		double velocity = e.getVelocity();
-		setTurnRight(e.getBearing()+90-30);
-		if(energydiff > 0) {
-			//setAhead((e.getDistance()/4+25));
-		}
-		double alpha = Math.asin((velocity*Math.sin(180 - bearing))/17);
-		turnGunRight(alpha);
-		fire(1);
-		turnGunLeft(2);
-		fire(1);
-		turnGunRight(4);
-		fire(1);
-	}
 
-	/**
-	 * onHitByBullet: What to do when you're hit by a bullet
-	 */
-	public void onHitByBullet(HitByBulletEvent e) {
-    setTurnGunLeft(e.getBearing());
-		fire(10);
+	public void onScannedRobot(ScannedRobotEvent e) {
+        setTurnRadarRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getRadarHeading()));
+
+        //calculate enemy heading (using their + or - velocity)
+        double enemy_heading;
+        if(e.getVelocity() >= 0){
+            enemy_heading = e.getHeading();
+        }
+        else{
+            enemy_heading = (180 + e.getHeading()) % 360;
+        }
+        double theta = (180 + getGunHeading() - enemy_heading) % 360;
+        if(theta > 180){
+            theta = theta - 360;
+        }
+        double a = (360/(2*Math.PI)) * Math.asin((Math.abs(e.getVelocity()) * Math.sin(theta * (2*Math.PI)/360))/17);
+        // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
+        System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
+        setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
+        fire(1);
 	}
 	
 	/**
