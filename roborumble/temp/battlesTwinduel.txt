@@ -1,0 +1,10 @@
+wcsv.Coyote.CoyotePair .1,jeremyreeder.collective.DuoLedByDroid 1.0fix,SERVER
+wiki.twin.InevitableTeam 0.1,kinsen.twin.SelcouthTeam 1.1,SERVER
+kawigi.twin.MarioBros 1.0,madness.Dyn4sty 1.0,SERVER
+krillr.mini.JointStrikeForce 2.0c,wompi.TassieDevils 1.8,SERVER
+kawigi.twin.MarioBros 1.0,wompi.TassieDevils 1.8,SERVER
+EH.twin.OlympusTwins 1.1,wompi.TassieDevils 1.8,SERVER
+wcsv.Coyote.CoyotePair .1,wiki.twin.KomariousTeam 1.0,SERVER
+gh.twin.GrauwuarG 0.41,wompi.TassieDevils 1.8,SERVER
+ags.lunartwins.LunarTwins 1.4a,chase.twin.SurroundingTeam 1.0,SERVER
+jk.team.NightAndDay 1.6,kinsen.twin.SelcouthTeam 1.1,SERVER
