@@ -16,7 +16,8 @@ public class MoistPits extends AdvancedRobot
 	double bheight;
 	double bwidth;
 	double pEnergy = 100;
-    double gun_power = 3;
+    double gun_power = 6;
+    double shooting_distance = 200;
 	double maxDistance;
 	int direction = 1;
 	int dir = 1;
@@ -82,7 +83,7 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
         // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
 		System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
 		setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
-		if(e.getDistance() < 400 && getGunHeat() == 0)
+		if(e.getDistance() < shooting_distance && getGunHeat() == 0)
 			setFire(gun_power);
 
 	}
