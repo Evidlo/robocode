@@ -1,1 +1,4 @@
 *.class
+config*
+*.database
+*.properties
