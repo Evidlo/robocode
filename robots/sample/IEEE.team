@@ -1,0 +1,6 @@
+#Robocode robot team
+#Sat Oct 03 10:30:48 EDT 2015
+team.members=sample.MyFirstRobot,sample.SittingDuck
+team.author.name=Gregor Nietkovsky
+robocode.version=1.9.2.4
+team.description=\                             A sample robot\n     Moves in a seesaw motion, and spins the gun around at each end\n     Turns perpendicular to the direction of a bullet that hits it
