@@ -41,9 +41,9 @@ public class MoistPits extends AdvancedRobot
 			////////////
 			//updateDirection();
 if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), Math.PI)) {
-					ahead((Math.max(getBattleFieldHeight() - getY(), getY()) - 28) * dir);
+					ahead((Math.max(getBattleFieldHeight() - getY(), getY()) - 50) * dir);
 				} else {
-					ahead((Math.max(getBattleFieldWidth() - getX(), getX()) - 28) * dir);
+					ahead((Math.max(getBattleFieldWidth() - getX(), getX()) - 50) * dir);
 				}
 			turnRight(90 * dir);
 			////////SWITCH THIS WHATEVER SCANNING FUNCTION
@@ -77,12 +77,12 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
 		if(theta > 180){
 			theta = theta - 360;
 		}
-		double a = (360/(2*Math.PI)) * Math.asin((Math.abs(e.getVelocity()) * Math.sin(theta * (2*Math.PI)/360))/14);
+		double a = (360/(2*Math.PI)) * Math.asin((Math.abs(e.getVelocity()) * Math.sin(theta * (2*Math.PI)/360))/18);
         // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
 		System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
 		setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
-		if(e.getDistance() < bwidth/2)
-			setFire(2);
+		if(e.getDistance() < 300 && getGunHeat() == 0)
+			setFire(3);
 
 	}
 
