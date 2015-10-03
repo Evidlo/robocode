@@ -12,8 +12,14 @@ public class MoistPits extends AdvancedRobot
 	/**
 	 * run: MoistPits's default behavior
 	 */
+	double bheight;
+	double bwidth;
 	double pEnergy = 100;
+	double maxDistance;
+	int direction = 1;
 	public void run() {
+		bheight = getBattleFieldHeight();
+		bwidth = getBattleFieldWidth();
 		// Initialization of the robot should be put here
 
 		// After trying out your robot, try uncommenting the import at the top,
@@ -24,10 +30,40 @@ public class MoistPits extends AdvancedRobot
 		// Robot main loop
 		while(true) {
 			// Replace the next 4 lines with any behavior you would like
-//			ahead(100);
-			turnGunRight(360);
-//			back(100);
-			turnGunRight(360);
+			maxTravel(1);
+			//ahead(Math.floor(Math.random()*maxDistance));
+			ahead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			////////////
+
+			double location = Math.atan((getY()-(bheight/2))/(getX()-(bwidth/2)));
+			double angle = Math.atan(bheight/bwidth);
+			double offset = 10 + (-20 * direction);
+			angle = Math.toDegrees(angle);
+			location = Math.toDegrees(location);
+			if(getX() < bwidth/2) {
+				location += 180;
+			}
+			location = location % 360;
+			//location += (180 * direction);
+			if(location > (angle + offset) && location < (180-angle + offset)) {
+				setTurnRight((90+(180*direction)-getHeading())%360);
+			}
+			else if (location > (180-angle + offset) && location < (180+angle + offset)) {
+				setTurnRight((0+(180*direction)-getHeading())%360);
+			}		
+			else if (location > (180 + angle + offset) || (location > -90 && location < 0 - angle + offset)) {
+				setTurnRight((270+(180*direction)-getHeading())%360);
+			}
+			else {
+				setTurnRight((180+(180*direction)-getHeading())%360);
+			}
+			System.out.println("Location: " + location + ", Angle: " + angle + ", Heading: " + getHeading());
+
+
+
+
+			////////
+			turnGunRight(180);
 		}
 	}
 
@@ -35,16 +71,23 @@ public class MoistPits extends AdvancedRobot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// Replace the next line with any behavior you would like
 		double energydiff = pEnergy - e.getEnergy();
 		double bearing = e.getBearing();
 		double velocity = e.getVelocity();
-		setTurnRight(e.getBearing()+90-30);
-		if(energydiff > 0) {
-			//setAhead((e.getDistance()/4+25));
+		double alpha;
+		//setTurnRight(e.getBearing()+90-30);
+		if(energydiff > 0 && energydiff <= 3) {
+			direction = -1;
 		}
-		double alpha = Math.asin((velocity*Math.sin(180 - bearing))/17);
-		turnGunRight(alpha);
+		pEnergy = e.getEnergy();
+
+		//GUN MECHANICS
+		if(velocity > 0)
+			alpha = Math.asin((velocity*Math.sin(180 - bearing))/17);
+		else 
+			alpha = 0;
+
+		turnGunLeft(alpha);
 		fire(1);
 		turnGunLeft(2);
 		fire(1);
@@ -56,7 +99,7 @@ public class MoistPits extends AdvancedRobot
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
-    setTurnGunLeft(e.getBearing());
+		setTurnGunLeft(e.getBearing());
 		fire(10);
 	}
 	
@@ -66,19 +109,55 @@ public class MoistPits extends AdvancedRobot
 	public void onHitWall(HitWallEvent e) {
 		// Replace the next line with any behavior you would like
 		if(Math.abs(e.getBearing())>90){
-		ahead(20);
+			ahead(20);
 		}
 		else{
 			back(20);
 		}
 	}	
 
-    public void onHitRobot(HitRobotEvent e) {
+	public void onHitRobot(HitRobotEvent e) {
         //Turn towards enemy robot, fire twice
-        setBack(10);
-        turnGunLeft(e.getBearing());
-        fire(2);
-    }	
+		setBack(10);
+		turnGunLeft(e.getBearing());
+		fire(2);
+	}	
+	public void maxTravel(int direction) {
+		if(direction == -1) {
+			if(getHeading() == 0)  { //North
+				maxDistance = getY();
+			}
+			else if (getHeading() == 90) {//East
+				maxDistance = getX();
+			}
+			else if(getHeading() == 180)  { //North
+				maxDistance = bheight - getY();
+			}
+			else if (getHeading() == 270) {//East
+				maxDistance = bwidth - getX();
+			}
+			else {
+				maxDistance = 50;
+			}			
+		}
+		else {
+			if(getHeading() == 0)  { //North
+				maxDistance = bheight - getY();
+			}
+			else if (getHeading() == 90) {//East
+				maxDistance = bwidth - getX();
+			}
+			else if(getHeading() == 180)  { //North
+				maxDistance = getY();
+			}
+			else if (getHeading() == 270) {//East
+				maxDistance = getX();
+			}
+			else {
+				maxDistance = 50;
+			}
+		}
 
+	}
 
 }
