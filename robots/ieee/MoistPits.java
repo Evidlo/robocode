@@ -44,6 +44,7 @@ public class MoistPits extends Robot
 	public void onHitByBullet(HitByBulletEvent e) {
 		// Replace the next line with any behavior you would like
 		back(10);
+		fire(10);
 	}
 	
 	/**
@@ -51,6 +52,11 @@ public class MoistPits extends Robot
 	 */
 	public void onHitWall(HitWallEvent e) {
 		// Replace the next line with any behavior you would like
-		back(20);
+		if(Math.abs(e.getBearing())>90){
+		ahead(20);
+		}
+		else{
+			back(20);
+		}
 	}	
 }
