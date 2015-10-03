@@ -30,39 +30,11 @@ public class MoistPits extends AdvancedRobot
 		// Robot main loop
 		while(true) {
 			// Replace the next 4 lines with any behavior you would like
-			maxTravel(1);
-			//ahead(Math.floor(Math.random()*maxDistance));
-			ahead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			quickMove();
 			////////////
+			updateDirection();
 
-			double location = Math.atan((getY()-(bheight/2))/(getX()-(bwidth/2)));
-			double angle = Math.atan(bheight/bwidth);
-			double offset = 10 + (-20 * direction);
-			angle = Math.toDegrees(angle);
-			location = Math.toDegrees(location);
-			if(getX() < bwidth/2) {
-				location += 180;
-			}
-			location = location % 360;
-			//location += (180 * direction);
-			if(location > (angle + offset) && location < (180-angle + offset)) {
-				setTurnRight((90+(180*direction)-getHeading())%360);
-			}
-			else if (location > (180-angle + offset) && location < (180+angle + offset)) {
-				setTurnRight((0+(180*direction)-getHeading())%360);
-			}		
-			else if (location > (180 + angle + offset) || (location > -90 && location < 0 - angle + offset)) {
-				setTurnRight((270+(180*direction)-getHeading())%360);
-			}
-			else {
-				setTurnRight((180+(180*direction)-getHeading())%360);
-			}
-			System.out.println("Location: " + location + ", Angle: " + angle + ", Heading: " + getHeading());
-
-
-
-
-			////////
+			////////SWITCH THIS WHATEVER SCANNING FUNCTION
 			turnGunRight(180);
 		}
 	}
@@ -77,7 +49,8 @@ public class MoistPits extends AdvancedRobot
 		double alpha;
 		//setTurnRight(e.getBearing()+90-30);
 		if(energydiff > 0 && energydiff <= 3) {
-			direction = -1;
+			direction = (direction == 1) ? direction - 1 : direction + 1;
+			quickMove();
 		}
 		pEnergy = e.getEnergy();
 
@@ -123,7 +96,7 @@ public class MoistPits extends AdvancedRobot
 		fire(2);
 	}	
 	public void maxTravel(int direction) {
-		if(direction == -1) {
+		if(direction == 1) {
 			if(getHeading() == 0)  { //North
 				maxDistance = getY();
 			}
@@ -159,5 +132,40 @@ public class MoistPits extends AdvancedRobot
 		}
 
 	}
-
+	public void quickMove() {
+			maxTravel(direction);
+			//ahead(Math.floor(Math.random()*maxDistance));
+			if(direction == 0) {
+				setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			}
+			else {
+				setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			}
+				
+	}
+	public void updateDirection() {
+			double location = Math.atan((getY()-(bheight/2))/(getX()-(bwidth/2)));
+			double angle = Math.atan(bheight/bwidth);
+			double offset = 10 + (-20 * direction);
+			angle = Math.toDegrees(angle);
+			location = Math.toDegrees(location);
+			if(getX() < bwidth/2) {
+				location += 180;
+			}
+			location = location % 360;
+			//location += (180 * direction);
+			if(location > (angle + offset) && location < (180-angle + offset)) {
+				setTurnRight((90-getHeading())%360);
+			}
+			else if (location > (180-angle + offset) && location < (180+angle + offset)) {
+				setTurnRight((0-getHeading())%360);
+			}		
+			else if (location > (180 + angle + offset) || (location > -90 && location < 0 - angle + offset)) {
+				setTurnRight((270-getHeading())%360);
+			}
+			else {
+				setTurnRight((180-getHeading())%360);
+			}
+			System.out.println("Location: " + location + ", Angle: " + angle + ", Heading: " + getHeading());
+	}
 }
