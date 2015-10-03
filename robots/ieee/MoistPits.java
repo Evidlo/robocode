@@ -81,7 +81,7 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
         // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
 		System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
 		setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
-		if(e.getDistance() < bWidth/2)
+		if(e.getDistance() < bwidth/2)
 			setFire(2);
 
 	}
