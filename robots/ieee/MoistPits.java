@@ -23,8 +23,11 @@ public class MoistPits extends AdvancedRobot
         setAdjustRadarForRobotTurn(true);
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
+        setTurnRadarRight(180);
         while (true) {
-            turnRadarRight(360);
+            ahead(100);
+            back(100);
+            
         }
     }   
 	/**
@@ -50,7 +53,7 @@ public class MoistPits extends AdvancedRobot
         // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
         System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
         setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
-        fire(1);
+        setFire(1);
 	}
 	
 	/**
