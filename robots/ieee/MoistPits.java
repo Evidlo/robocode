@@ -20,6 +20,7 @@ public class MoistPits extends AdvancedRobot
 	public void run() {
 		bheight = getBattleFieldHeight();
 		bwidth = getBattleFieldWidth();
+
 		// Initialization of the robot should be put here
 
 		// After trying out your robot, try uncommenting the import at the top,
@@ -54,12 +55,12 @@ public class MoistPits extends AdvancedRobot
 		}
 		pEnergy = e.getEnergy();
 
-		//GUN MECHANICS
+
+		//REPLACE THIS WITH AIMING CODE
 		if(velocity > 0)
 			alpha = Math.asin((velocity*Math.sin(180 - bearing))/17);
 		else 
 			alpha = 0;
-
 		turnGunLeft(alpha);
 		fire(1);
 		turnGunLeft(2);
