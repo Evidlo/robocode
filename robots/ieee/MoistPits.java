@@ -7,7 +7,7 @@ import robocode.*;
 /**
  * MoistPits - a robot by (your name here)
  */
-public class MoistPits extends Robot
+public class MoistPits extends AdvancedRobot
 {
 	/**
 	 * run: MoistPits's default behavior
@@ -49,8 +49,7 @@ public class MoistPits extends Robot
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
-		// Replace the next line with any behavior you would like
-		back(10);
+    setTurnGunLeft(e.getBearing());
 		fire(10);
 	}
 	
@@ -66,4 +65,12 @@ public class MoistPits extends Robot
 			back(20);
 		}
 	}	
+
+    public void onHitRobot(HitRobotEvent e) {
+        //Turn towards enemy robot, fire twice
+        setBack(10);
+        turnGunLeft(e.getBearing());
+        fire(2);
+    }	
+
 }
