@@ -1,7 +1,8 @@
 package ieee;
 import robocode.*;
 //import java.awt.Color;
-
+import robocode.util.*;
+import static robocode.util.Utils.normalRelativeAngleDegrees;
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/Robot.html
 
 /**
@@ -17,10 +18,15 @@ public class MoistPits extends AdvancedRobot
 	double pEnergy = 100;
 	double maxDistance;
 	int direction = 1;
+	int dir = 1;
 	public void run() {
 		bheight = getBattleFieldHeight();
 		bwidth = getBattleFieldWidth();
-
+		setAdjustRadarForRobotTurn(true);
+		setAdjustGunForRobotTurn(true);
+		setAdjustRadarForGunTurn(true);
+		setTurnRadarRight(Double.POSITIVE_INFINITY);
+		turnLeft(getHeading() % 90);
 		// Initialization of the robot should be put here
 
 		// After trying out your robot, try uncommenting the import at the top,
@@ -31,12 +37,16 @@ public class MoistPits extends AdvancedRobot
 		// Robot main loop
 		while(true) {
 			// Replace the next 4 lines with any behavior you would like
-			quickMove();
+			//quickMove();
 			////////////
-			updateDirection();
-
+			//updateDirection();
+if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), Math.PI)) {
+					ahead((Math.max(getBattleFieldHeight() - getY(), getY()) - 28) * dir);
+				} else {
+					ahead((Math.max(getBattleFieldWidth() - getX(), getX()) - 28) * dir);
+				}
+			turnRight(90 * dir);
 			////////SWITCH THIS WHATEVER SCANNING FUNCTION
-			turnGunRight(180);
 		}
 	}
 
@@ -45,28 +55,35 @@ public class MoistPits extends AdvancedRobot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energydiff = pEnergy - e.getEnergy();
-		double bearing = e.getBearing();
-		double velocity = e.getVelocity();
-		double alpha;
 		//setTurnRight(e.getBearing()+90-30);
 		if(energydiff > 0 && energydiff <= 3) {
-			direction = (direction == 1) ? direction - 1 : direction + 1;
-			quickMove();
+			dir = -dir;
+			//quickMove();
 		}
 		pEnergy = e.getEnergy();
 
+		//SHOOTING
+		setTurnRadarRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getRadarHeading()));
 
-		//REPLACE THIS WITH AIMING CODE
-		if(velocity > 0)
-			alpha = Math.asin((velocity*Math.sin(180 - bearing))/17);
-		else 
-			alpha = 0;
-		turnGunLeft(alpha);
-		fire(1);
-		turnGunLeft(2);
-		fire(1);
-		turnGunRight(4);
-		fire(1);
+        //calculate enemy heading (using their + or - velocity)
+		double enemy_heading;
+		if(e.getVelocity() >= 0){
+			enemy_heading = e.getHeading();
+		}
+		else{
+			enemy_heading = (180 + e.getHeading()) % 360;
+		}
+		double theta = (180 + getGunHeading() - enemy_heading) % 360;
+		if(theta > 180){
+			theta = theta - 360;
+		}
+		double a = (360/(2*Math.PI)) * Math.asin((Math.abs(e.getVelocity()) * Math.sin(theta * (2*Math.PI)/360))/14);
+        // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
+		System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
+		setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
+		if(e.getDistance() < bWidth/2)
+			setFire(2);
+
 	}
 
 	/**
@@ -134,39 +151,39 @@ public class MoistPits extends AdvancedRobot
 
 	}
 	public void quickMove() {
-			maxTravel(direction);
+		maxTravel(direction);
 			//ahead(Math.floor(Math.random()*maxDistance));
-			if(direction == 0) {
-				setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
-			}
-			else {
-				setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
-			}
-				
+		if(direction == 0) {
+			setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+		}
+		else {
+			setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+		}
+
 	}
 	public void updateDirection() {
-			double location = Math.atan((getY()-(bheight/2))/(getX()-(bwidth/2)));
-			double angle = Math.atan(bheight/bwidth);
-			double offset = 10 + (-20 * direction);
-			angle = Math.toDegrees(angle);
-			location = Math.toDegrees(location);
-			if(getX() < bwidth/2) {
-				location += 180;
-			}
-			location = location % 360;
+		double location = Math.atan((getY()-(bheight/2))/(getX()-(bwidth/2)));
+		double angle = Math.atan(bheight/bwidth);
+		double offset = 10 + (-20 * direction);
+		angle = Math.toDegrees(angle);
+		location = Math.toDegrees(location);
+		if(getX() < bwidth/2) {
+			location += 180;
+		}
+		location = location % 360;
 			//location += (180 * direction);
-			if(location > (angle + offset) && location < (180-angle + offset)) {
-				setTurnRight((90-getHeading())%360);
-			}
-			else if (location > (180-angle + offset) && location < (180+angle + offset)) {
-				setTurnRight((0-getHeading())%360);
-			}		
-			else if (location > (180 + angle + offset) || (location > -90 && location < 0 - angle + offset)) {
-				setTurnRight((270-getHeading())%360);
-			}
-			else {
-				setTurnRight((180-getHeading())%360);
-			}
-			System.out.println("Location: " + location + ", Angle: " + angle + ", Heading: " + getHeading());
+		if(location > (angle + offset) && location < (180-angle + offset)) {
+			setTurnRight((90-getHeading())%360);
+		}
+		else if (location > (180-angle + offset) && location < (180+angle + offset)) {
+			setTurnRight((0-getHeading())%360);
+		}		
+		else if (location > (180 + angle + offset) || (location > -90 && location < 0 - angle + offset)) {
+			setTurnRight((270-getHeading())%360);
+		}
+		else {
+			setTurnRight((180-getHeading())%360);
+		}
+		System.out.println("Location: " + location + ", Angle: " + angle + ", Heading: " + getHeading());
 	}
 }
