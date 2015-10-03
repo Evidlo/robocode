@@ -155,10 +155,10 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
 		maxTravel(direction);
 			//ahead(Math.floor(Math.random()*maxDistance));
 		if(direction == 0) {
-			setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 200);
 		}
 		else {
-			setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 200);
 		}
 
 	}
