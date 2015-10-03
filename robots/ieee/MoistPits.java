@@ -38,10 +38,9 @@ public class MoistPits extends AdvancedRobot
 		// Replace the next line with any behavior you would like
 		double energydiff = pEnergy - e.getEnergy();
 		double bearing = e.getBearing();
-		setTurnRight(e.getBearing()+90-
-         30*movementDirection);
-		if(energyDiff > 0) {
-			setAhead((e.getDistance()/4+25)movementDirection);
+		setTurnRight(e.getBearing()+90-30);
+		if(energydiff > 0) {
+			setAhead((e.getDistance()/4+25));
 		}
 		fire(1);
 	}
