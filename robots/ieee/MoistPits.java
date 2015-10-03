@@ -24,9 +24,9 @@ public class MoistPits extends AdvancedRobot
 		// Robot main loop
 		while(true) {
 			// Replace the next 4 lines with any behavior you would like
-			ahead(100);
+//			ahead(100);
 			turnGunRight(360);
-			back(100);
+//			back(100);
 			turnGunRight(360);
 		}
 	}
@@ -38,10 +38,17 @@ public class MoistPits extends AdvancedRobot
 		// Replace the next line with any behavior you would like
 		double energydiff = pEnergy - e.getEnergy();
 		double bearing = e.getBearing();
+		double velocity = e.getVelocity();
 		setTurnRight(e.getBearing()+90-30);
 		if(energydiff > 0) {
-			setAhead((e.getDistance()/4+25));
+			//setAhead((e.getDistance()/4+25));
 		}
+		double alpha = Math.asin((velocity*Math.sin(180 - bearing))/17);
+		turnGunRight(alpha);
+		fire(1);
+		turnGunLeft(2);
+		fire(1);
+		turnGunRight(4);
 		fire(1);
 	}
 
@@ -72,5 +79,6 @@ public class MoistPits extends AdvancedRobot
         turnGunLeft(e.getBearing());
         fire(2);
     }	
+
 
 }
