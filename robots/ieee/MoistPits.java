@@ -81,7 +81,7 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
         // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
 		System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
 		setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
-		if(e.getDistance() < 300 && getGunHeat() == 0)
+		if(e.getDistance() < 400 && getGunHeat() == 0)
 			setFire(3);
 
 	}
@@ -154,10 +154,10 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
 		maxTravel(direction);
 			//ahead(Math.floor(Math.random()*maxDistance));
 		if(direction == 0) {
-			setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			setAhead((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 200);
 		}
 		else {
-			setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 50);
+			setBack((maxDistance/2) + Math.floor(Math.random()*(maxDistance/2)) - 200);
 		}
 
 	}
