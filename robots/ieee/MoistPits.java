@@ -12,6 +12,7 @@ public class MoistPits extends AdvancedRobot
 	/**
 	 * run: MoistPits's default behavior
 	 */
+	double pEnergy = 100;
 	public void run() {
 		// Initialization of the robot should be put here
 
@@ -35,12 +36,12 @@ public class MoistPits extends AdvancedRobot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		// Replace the next line with any behavior you would like
+		double energydiff = pEnergy - e.getEnergy();
 		double bearing = e.getBearing();
-		if(bearing > 0) {
-			turnGunRight(bearing);
-		}
-		else {
-			turnGunLeft(bearing);
+		setTurnRight(e.getBearing()+90-
+         30*movementDirection);
+		if(energyDiff > 0) {
+			setAhead((e.getDistance()/4+25)movementDirection);
 		}
 		fire(1);
 	}
