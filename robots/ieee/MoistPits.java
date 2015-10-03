@@ -1,5 +1,6 @@
 package ieee;
 import robocode.*;
+import java.util.*;
 //import java.awt.Color;
 import robocode.util.*;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
@@ -8,8 +9,19 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
 /**
  * MoistPits - a robot by (your name here)
  */
+
+
 public class MoistPits extends AdvancedRobot
 {
+	public class EnemyLoc {
+		public double x;
+		public double y;
+
+		EnemyLoc(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 	/**
 	 * run: MoistPits's default behavior
 	 */
@@ -19,6 +31,9 @@ public class MoistPits extends AdvancedRobot
 	double maxDistance;
 	int direction = 1;
 	int dir = 1;
+	List<EnemyLoc> enemyLoc = new ArrayList<EnemyLoc>(5);
+
+
 	public void run() {
 		bheight = getBattleFieldHeight();
 		bwidth = getBattleFieldWidth();
@@ -40,11 +55,11 @@ public class MoistPits extends AdvancedRobot
 			//quickMove();
 			////////////
 			//updateDirection();
-if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), Math.PI)) {
-					ahead((Math.max(getBattleFieldHeight() - getY(), getY()) - 28) * dir);
-				} else {
-					ahead((Math.max(getBattleFieldWidth() - getX(), getX()) - 28) * dir);
-				}
+			if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), Math.PI)) {
+				ahead((Math.max(getBattleFieldHeight() - getY(), getY()) - 28) * dir);
+			} else {
+				ahead((Math.max(getBattleFieldWidth() - getX(), getX()) - 28) * dir);
+			}
 			turnRight(90 * dir);
 			////////SWITCH THIS WHATEVER SCANNING FUNCTION
 		}
@@ -81,7 +96,7 @@ if (Utils.isNear(getHeadingRadians(), 0D) || Utils.isNear(getHeadingRadians(), M
         // System.out.println("||E:" + enemy_heading + "||R:" + getGunHeading() + "||Theta:" + theta);
 		System.out.println("||vel:" + e.getVelocity() + "||Th" + theta + "||A:" + a);
 		setTurnGunRight(normalRelativeAngleDegrees(getHeading() + e.getBearing() - getGunHeading()) + a);
-		if(e.getDistance() < bWidth/2)
+		if(e.getDistance() < bwidth/2)
 			setFire(2);
 
 	}
